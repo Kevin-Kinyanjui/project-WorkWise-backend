@@ -3,7 +3,10 @@ ENV["RACK_ENV"] ||= "development"
 require 'bundler/setup'
 Bundler.require(:default, ENV["RACK_ENV"])
 
-require 'sinatra/activerecord/rake'
+require 'json'
 require 'faker'
+require 'sinatra'
+require 'sinatra/flash'
+require 'sinatra/activerecord/rake'
 
 require_all 'app'
