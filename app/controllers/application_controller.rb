@@ -4,6 +4,9 @@ class ApplicationController < Sinatra::Base
     set :default_content_type, 'application/json'
 
     enable :sessions
+    set :session_secret, ENV['SESSION_SECRET'] || '46b1963be3d827007d7a70ffb5fc6994b3ee9f9dc4e5bff28d48d7473acd244f'
+    use Rack::Session::Cookie, key: 'rack.session', path: '/', expire_after: 60 * 60 * 24 * 7
+
     register Sinatra::Flash
   
     get '/' do
@@ -17,7 +20,7 @@ class ApplicationController < Sinatra::Base
       user = User.find_by(username: username)
 
       if user && password && user.password == password
-        session[:user_id] = user.id
+        session[:user] = user
         { success: true, message: "Login successful" }.to_json
       else
         { success: false, message: "Invalid username or password" }.to_json
@@ -49,14 +52,63 @@ class ApplicationController < Sinatra::Base
 
     get '/users/dashboard' do
       @current_user = session[:user]
-      
+    
       if @current_user
-
+        user_details = {
+          name: @current_user.username,
+          email: @current_user.email,
+          role: @current_user.role
+        }
+    
+        if @current_user.role == "job seeker"
+          user_details[:applications] = @current_user.applications.map do |application|
+            {
+              id: application.id,
+              job_id: application.job_id,
+              job_title: application.job.title,
+              job_description: application.job.description,
+              job_requirements: application.job.requirements,
+              job_location: application.job.location,
+              cover_letter: application.cover_letter,
+              resume: application.resume
+            }
+          end
+        elsif @current_user.role == "employer"
+          user_details[:jobs] = @current_user.jobs.map do |job|
+            applicants = job.applications.map do |application|
+              {
+                applicant_id: application.job_seeker.id,
+                applicant_name: application.job_seeker.username,
+                applicant_email: application.job_seeker.email,
+                applicant_resume: application.resume
+              }
+            end
+    
+            {
+              id: job.id,
+              title: job.title,
+              description: job.description,
+              requirements: job.requirements,
+              location: job.location,
+              applicants: applicants
+            }
+          end
+        elsif @current_user.role == "freelancer"
+          user_details[:freelance_applications] = @current_user.freelance_applications.map do |task|
+            {
+              id: task.id,
+              freelance_task_id: task.freelance_task_id,
+              proposal: task.proposal
+            }
+          end
+        end
+        
+        user_details.to_json
       else
-        flash[:error] = "You need to log in to access the dashboard."
+        { error: "You need to log in to access the dashboard." }.to_json
       end
     end
-
+    
     get '/jobs' do
       jobs = Job.all
     
