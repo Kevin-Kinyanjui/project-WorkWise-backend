@@ -1,4 +1,4 @@
-require_relative "../config/environment"
+require_relative "/home/vince/development/code/phase3/code-project-workwise/workwise-backend/config/environment.rb"
 
 class ApplicationController < Sinatra::Base
     set :default_content_type, 'application/json'
@@ -10,17 +10,13 @@ class ApplicationController < Sinatra::Base
       { name: 'Hello World' }.to_json
     end
 
-    # get '/users/login' do
-    #   erb :login_form
-    # end
-
     post '/users/login' do
       username = params[:username]
       password = params[:password]
-    
+
       user = User.find_by(username: username)
-    
-      if user && user.password == password
+
+      if user && password && user.password == password
         session[:user_id] = user.id
         { success: true, message: "Login successful" }.to_json
       else
@@ -28,23 +24,20 @@ class ApplicationController < Sinatra::Base
       end
     end
 
-    # get '/users/logout' do
-    #   # Handle user logout here
-    # end
-
-    # get '/users/register' do
-    #   erb :registration_form
-    # end
+    get '/users/logout' do
+      session.clear
+    end
 
     post '/users/register' do
       username = params[:username]
       password = params[:password]
       email = params[:email]
+      role = params[:role]
     
       if User.exists?(username: username) || User.exists?(email: email)
         { success: false, message: "Username or email already taken" }.to_json
       else
-        new_user = User.create(username: username, password: password, email: email)
+        new_user = User.create(username: username, password: password, email: email, role: role)
 
         if new_user.valid?
           { success: true, message: "Registration successful" }.to_json
@@ -55,9 +48,14 @@ class ApplicationController < Sinatra::Base
     end
 
     get '/users/dashboard' do
-      # Display the user's dashboard here
-    end
+      @current_user = session[:user]
+      
+      if @current_user
 
+      else
+        flash[:error] = "You need to log in to access the dashboard."
+      end
+    end
 
     get '/jobs' do
       jobs = Job.all

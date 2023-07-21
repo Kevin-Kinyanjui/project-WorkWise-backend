@@ -10,3 +10,5 @@ gem "faker"
 gem "rerun"
 gem "pry"
 gem 'webrick'
+gem "sinatra-flash"
+gem "rack-contrib"
