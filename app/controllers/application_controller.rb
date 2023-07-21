@@ -139,6 +139,7 @@ class ApplicationController < Sinatra::Base
           id: job.id,
           title: job.title,
           description: job.description,
+          requirements: job.requirements,
           location: job.location,
           applicants: applicants
         }
@@ -171,27 +172,17 @@ class ApplicationController < Sinatra::Base
         { success: false, message: "Failed to create job listing" }.to_json
       end
     end
-
-    # get '/job_listings/:id/edit' do |id|
-    #   @job_listing = JobListing.find_by(id: id)
     
-    #   if @job_listing
-    #     erb :edit_job_listing
-    #   else
-    #     flash[:error] = "Job listing not found"
-    #     redirect '/job_listings'
-    #   end
-    # end
-    
-    patch '/job_listings/:id' do |id|
-      @job = Job.find_by(id: id)
+    patch '/jobs/:id' do |id|
+      @job = Job.find(id)
 
       if @job
         title = params[:title]
         description = params[:description]
+        requirements = params[:requirements]
         location = params[:location]
 
-        if @job.update(title: title, description: description, location: location)
+        if @job.update(title: title, description: description, requirements: requirements, location: location)
           flash[:success] = "Job listing updated successfully"
         else
           flash[:error] = "Failed to update job listing"
