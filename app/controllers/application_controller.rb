@@ -261,7 +261,7 @@ class ApplicationController < Sinatra::Base
     end
     
     get '/freelance_tasks/:id' do |id|
-      freelance_task = FreelanceTask.find_by(id: id)
+      freelance_task = FreelanceTask.find(id)
     
       if freelance_task
         freelance_task_json = {
@@ -291,15 +291,46 @@ class ApplicationController < Sinatra::Base
       end
     end
 
+    patch '/freelance_tasks/:id' do |id|
+      @freelance_task = FreelanceTask.find(id)
+    
+      if @freelance_task
+          title = params[:title]
+          description = params[:description]
+          if @freelance_task.update(title: title, description: description)
+            { success: true, message: "Freelance task updated successfully" }.to_json
+          else
+            { success: false, message: "Failed to update the freelance task" }.to_json
+          end
+      else
+        { error: "Freelance task not found" }.to_json
+      end
+    end    
+
+    delete '/freelance_tasks/:id' do |id|
+      task = FreelanceTask.find(id)
+    
+      if task
+        # Delete all associated applications first cause of validation
+          task.freelance_applications.destroy_all
+        if task.destroy
+          flash[:success] = "Freelance Task listing deleted successfully"
+        else
+          flash[:error] = "Failed to delete freelance task listing"
+        end
+      else
+        flash[:error] = "Freelance task listing not found"
+      end
+    end 
+
     post '/freelance_tasks/:id/apply' do |id|
-      freelance_task = FreelanceTask.find_by(id: id)
+      freelance_task = FreelanceTask.find(id)
     
       if freelance_task
         new_application = FreelanceApplication.create(
-          name: params[:name],
-          email: params[:email],
-          cover_letter: params[:cover_letter],
-          freelance_task_id: freelance_task.id
+          freelance_task_id: freelance_task.id,
+          freelancer_id: session[:user].id,
+          proposal: params[:proposal]
         )
     
         if new_application.valid?
@@ -311,6 +342,24 @@ class ApplicationController < Sinatra::Base
         { error: "Freelance task not found" }.to_json
       end
     end
+
+    delete '/freelance_applications/:id' do |id|
+      @freelance_application = FreelanceApplication.find(id)
+    
+      if @freelance_application
+        if @freelance_application.user == session[:user]
+          if @freelance_application.destroy
+            { success: true, message: "Freelance task deleted successfully" }.to_json
+          else
+            { success: false, message: "Failed to delete the freelance task" }.to_json
+          end
+        else
+          { error: "You don't have permission to delete this freelance task" }.to_json
+        end
+      else
+        { error: "Freelance task not found" }.to_json
+      end
+    end    
 
     not_found do
       'This page does not exist.'
