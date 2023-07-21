@@ -5,7 +5,7 @@ class ApplicationController < Sinatra::Base
 
     enable :sessions
     set :session_secret, ENV['SESSION_SECRET'] || '46b1963be3d827007d7a70ffb5fc6994b3ee9f9dc4e5bff28d48d7473acd244f'
-    use Rack::Session::Cookie, key: 'rack.session', path: '/', expire_after: 60 * 60 * 24 * 7
+    use Rack::Session::Cookie, key: 'rack.session', path: '/', expire_after: 3600
 
     register Sinatra::Flash
   
@@ -117,7 +117,7 @@ class ApplicationController < Sinatra::Base
           id: job.id,
           title: job.title,
           description: job.description,
-          location: job.location,
+          location: job.location
         }
       end
       jobs_json.to_json
@@ -127,11 +127,20 @@ class ApplicationController < Sinatra::Base
       job = Job.find_by(id: id)
     
       if job
+        applicants = job.applications.map do |application|
+          {
+            applicant_id: application.job_seeker.id,
+            applicant_name: application.job_seeker.username,
+            applicant_email: application.job_seeker.email,
+            applicant_resume: application.resume
+          }
+        end
         job_json = {
           id: job.id,
           title: job.title,
           description: job.description,
           location: job.location,
+          applicants: applicants
         }
     
         job_json.to_json
@@ -141,14 +150,20 @@ class ApplicationController < Sinatra::Base
     end
     
     post '/jobs' do
+      employer_name = params[:employer_name]
       title = params[:title]
       description = params[:description]
+      requirements = params[:requirements]
       location = params[:location]
+
+      employerId = User.find_by(username: employer_name).id
     
       new_job = Job.create(
+        employer_id: employerId,
         title: title,
         description: description,
-        location: location,
+        requirements: requirements,
+        location: location
       )
       if new_job.valid?
         { success: true, message: "Job listing created successfully" }.to_json
