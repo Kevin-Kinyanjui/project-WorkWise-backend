@@ -193,10 +193,12 @@ class ApplicationController < Sinatra::Base
     end
 
     delete '/jobs/:id' do |id|
-      @job = Job.find_by(id: id)
+      job = Job.find(id)
     
-      if @job
-        if @job.destroy
+      if job
+        # Delete all associated applications first cause of validation
+          job.applications.destroy_all
+        if job.destroy
           flash[:success] = "Job listing deleted successfully"
         else
           flash[:error] = "Failed to delete job listing"
@@ -207,14 +209,14 @@ class ApplicationController < Sinatra::Base
     end
 
     post '/jobs/:id/apply' do |id|
-      job = Job.find_by(id: id)
+      job = Job.find(id)
     
       if job
         new_application = Application.create(
-          name: params[:name],
-          email: params[:email],
+          job_id: job.id,
+          job_seeker_id: session[:user].id,
           cover_letter: params[:cover_letter],
-          job_id: job.id
+          resume: Faker::Lorem.words(number: 3).join('_') + '.pdf'
         )
     
         if new_application.valid?
@@ -226,6 +228,24 @@ class ApplicationController < Sinatra::Base
         { error: "Job listing not found" }.to_json
       end
     end
+
+    delete '/applications/:id' do |id|
+      @application = Application.find(id)
+    
+      if @application
+        if @application.job_seeker == session[:user]
+          if @application.destroy
+            { success: true, message: "Application deleted successfully" }.to_json
+          else
+            { success: false, message: "Failed to delete the application" }.to_json
+          end
+        else
+          { error: "You don't have permission to delete this application" }.to_json
+        end
+      else
+        { error: "Application not found" }.to_json
+      end
+    end    
     
     get '/freelance_tasks' do
       freelance_tasks = FreelanceTask.all
