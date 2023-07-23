@@ -12,3 +12,4 @@ gem "pry"
 gem 'webrick'
 gem "sinatra-flash"
 gem "rack-contrib"
+gem "rack-cors"

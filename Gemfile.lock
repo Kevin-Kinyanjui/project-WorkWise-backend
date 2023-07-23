@@ -31,6 +31,8 @@ GEM
     rack (2.2.7)
     rack-contrib (2.3.0)
       rack (~> 2.0)
+    rack-cors (2.0.1)
+      rack (>= 2.0.0)
     rack-protection (3.0.6)
       rack
     rake (13.0.6)
@@ -65,6 +67,7 @@ DEPENDENCIES
   faker
   pry
   rack-contrib
+  rack-cors
   rake
   require_all
   rerun
