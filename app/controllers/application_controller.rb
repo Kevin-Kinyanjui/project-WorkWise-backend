@@ -111,13 +111,29 @@ class ApplicationController < Sinatra::Base
     
     get '/jobs' do
       jobs = Job.all
+
+      image_urls = [
+        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c21hbGwlMjBjb21wYW55JTIwbG9nb3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=400&q=40",
+        "https://plus.unsplash.com/premium_photo-1664301554245-2727ff96dc8e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1554049701-29ca4d4ecd27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1686191128663-475c73d8de27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1685062428514-2164290b3322?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1563302111-eab4b145e6c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDh8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1661347998996-dcf102498c63?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTh8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1661347998423-b15d37d6f61e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTR8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1633074263223-1d63d65363f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njh8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1494253109108-2e30c049369b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YnJhbmR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1617727553252-65863c156eb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJyYW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=40",
+        "https://images.unsplash.com/photo-1553835973-dec43bfddbeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjd8fGJyYW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=40"
+      ]    
     
       jobs_json = jobs.map do |job|
         {
           id: job.id,
           title: job.title,
           description: job.description,
-          location: job.location
+          location: job.location,
+          imageUrl: image_urls.sample
         }
       end
       jobs_json.to_json
