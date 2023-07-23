@@ -108,10 +108,8 @@ class ApplicationController < Sinatra::Base
         { error: "You need to log in to access the dashboard." }.to_json
       end
     end
-    
-    get '/jobs' do
-      jobs = Job.all
 
+    def random_image_url
       image_urls = [
         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c21hbGwlMjBjb21wYW55JTIwbG9nb3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=400&q=40",
         "https://plus.unsplash.com/premium_photo-1664301554245-2727ff96dc8e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=40",
@@ -123,9 +121,14 @@ class ApplicationController < Sinatra::Base
         "https://images.unsplash.com/photo-1661347998423-b15d37d6f61e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTR8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
         "https://images.unsplash.com/photo-1633074263223-1d63d65363f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Njh8fGNvbXBhbnklMjBsb2dvc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=40",
         "https://images.unsplash.com/photo-1494253109108-2e30c049369b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YnJhbmR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=400&q=40",
-        "https://images.unsplash.com/photo-1617727553252-65863c156eb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGJyYW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=40",
         "https://images.unsplash.com/photo-1553835973-dec43bfddbeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjd8fGJyYW5kfGVufDB8fDB8fHww&auto=format&fit=crop&w=400&q=40"
-      ]    
+      ]
+      image_urls.sample
+    end
+    
+    get '/jobs' do
+      jobs = Job.all
+
     
       jobs_json = jobs.map do |job|
         {
@@ -133,7 +136,7 @@ class ApplicationController < Sinatra::Base
           title: job.title,
           description: job.description,
           location: job.location,
-          imageUrl: image_urls.sample
+          imageUrl: random_image_url
         }
       end
       jobs_json.to_json
@@ -271,6 +274,7 @@ class ApplicationController < Sinatra::Base
           id: freelance_task.id,
           title: freelance_task.title,
           description: freelance_task.description,
+          imageUrl: random_image_url
         }
       end
       freelance_tasks_json.to_json
