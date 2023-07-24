@@ -148,6 +148,7 @@ class ApplicationController < Sinatra::Base
       if job
         applicants = job.applications.map do |application|
           {
+            application_id: application.id,
             applicant_id: application.job_seeker.id,
             applicant_name: application.job_seeker.username,
             applicant_email: application.job_seeker.email,
