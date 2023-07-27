@@ -12,6 +12,8 @@
 
 WorkWise is an innovative application designed to connect employers, employees, and freelance workers on a single platform. Whether you are looking to hire talented professionals or seeking new job opportunities, WorkWise simplifies the process by providing a user-friendly interface and robust features.
 
+It is built using *Ruby, React, bootstrap css, node js and HTML.*
+
 ## Minimum Viable Product
 
 The Minimum Viable Product (MVP) of WorkWise will include the following key features:
