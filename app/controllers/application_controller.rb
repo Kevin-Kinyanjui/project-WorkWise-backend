@@ -10,7 +10,7 @@ class ApplicationController < Sinatra::Base
     register Sinatra::Flash
   
     get '/' do
-      { name: 'Hello World' }.to_json
+      { name: 'Welcome to the backend' }.to_json
     end
 
     post '/users/login' do
@@ -383,7 +383,7 @@ class ApplicationController < Sinatra::Base
     end    
 
     not_found do
-      'This page does not exist.'
+      {'This page does not exist.'}.to_json
     end
   
   end
