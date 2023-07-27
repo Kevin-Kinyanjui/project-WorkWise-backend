@@ -26,10 +26,6 @@ The Minimum Viable Product (MVP) of WorkWise will include the following key feat
 
 5. **Apply for Jobs:** Users can apply for job opportunities directly through the platform, and employers can review and manage incoming applications.
 
-6. **Messaging:** An integrated messaging system that allows seamless communication between employers and candidates.
-
-7. **Review and Rating System:** Both employers and freelance workers can leave reviews and ratings for each other based on their experiences.
-
 ## Problem Statement
 
 The traditional job search process can be time-consuming and inefficient for both employers and job seekers. It often involves multiple platforms, lack of real-time communication, and difficulties in finding the right fit.
@@ -54,7 +50,11 @@ WorkWise aims to address these challenges and provide an all-in-one platform for
 
 3. **Comprehensive User Profiles:** Users will have detailed profiles showcasing their experience, skills, and portfolio, providing valuable insights into their qualifications.
 
-4. **Review and Rating System:** WorkWise will implement a reliable review and rating system, enhancing trust and credibility within the platform.
+## Problems Encountered
+
+Some of the problems encountered during development of the project are problems hosting the backend and although all backend functions were tested using **[Postman](https://postman.com)** and all work, not all were applied to the frontend due to errors encountered mainly because of having a separate backend and frontend. Development is still ongoing and all these shall be solved soon.
+
+The problems main solutions lie in the use of a better way to integrate the backend and frontend by use of *Ruby on rails*
 
 ## Deployment
 
@@ -69,3 +69,5 @@ Access the **[WorkWise Frontend Repository](https://github.com/Kevin-Kinyanjui/p
 With WorkWise, we aim to revolutionize the job market by streamlining the process of connecting employers and talented workers. Join us on this exciting journey to create a thriving community of professionals. For any queries or feedback, please contact us at contact@workwise-app.com.
 
 *(Note: The content provided above is entirely fictional and created for illustrative purposes only. Any resemblance to real products, projects, or entities is coincidental.)*
+
+Copyright © Kevin
