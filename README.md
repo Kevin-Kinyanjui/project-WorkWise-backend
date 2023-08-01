@@ -65,6 +65,7 @@ Check out the **[WorkWise Deployed Site](https://workwise-app.netlify.app/)** to
 ## Frontend Repository
 
 Access the **[WorkWise Frontend Repository](https://github.com/Kevin-Kinyanjui/project-WorkWise)** on GitHub to review the frontend source code.
+Access the **[Workwise frontend video](https://watch.screencastify.com/v/v2At3yoAFOnClq0mzvt2)** Recorded using Screencasftify here.
 
 ---
 
